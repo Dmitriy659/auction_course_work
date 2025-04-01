@@ -30,7 +30,7 @@ class AuctionPost(models.Model):
     city = models.CharField(max_length=100, null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     start_date = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='')
+    image = models.ImageField(upload_to='', null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
 
@@ -39,3 +39,8 @@ class Bid(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bids')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     create_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['auction_post', 'user'], name='unique_bid_per_post_user')
+        ]
