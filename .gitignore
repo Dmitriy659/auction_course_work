@@ -2,6 +2,7 @@
 .idea/
 __pycache__
 .env
+backend_media/*
 
 /node_modules/
 /.pnp

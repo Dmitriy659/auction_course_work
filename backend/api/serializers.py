@@ -31,6 +31,8 @@ class AuctionPostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # Устанавливаем current_price в starting_price, если он не передан
+        print(validated_data['image'])
+        print(validated_data['is_active'])
         if 'current_price' not in validated_data:
             validated_data['current_price'] = validated_data.get('starting_price')
 

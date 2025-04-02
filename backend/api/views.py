@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from django.contrib.auth.tokens import default_token_generator
 
 from .models import User, AuctionPost, Bid
-from .serializers import UserSerializer, AuctionPostSerializer, BidSerializer, PasswordResetSerializer
+from .serializers import UserSerializer, AuctionPostSerializer, BidSerializer
 from .permissions import IsOwnerOrReadOnly, IsOwnerOrAdmin, IsAuthenticatedOrReadOnly, CanViewOwnOrAuctionOwnerBids
 from rest_framework.pagination import PageNumberPagination
 
@@ -22,7 +22,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
     def get_permissions(self):
-        if self.action in ['create']:
+        if self.action in ['create', 'options']:
             # Регистрация доступна всем
             return [permissions.AllowAny()]
         elif self.action in ['update', 'partial_update', 'destroy']:
@@ -42,7 +42,16 @@ class AuctionPostViewSet(viewsets.ModelViewSet):
         starting_price = serializer.validated_data.get('starting_price')
         current_price = serializer.validated_data.get('current_price', starting_price)
 
-        serializer.save(user=self.request.user, current_price=current_price)
+        serializer.save(user=self.request.user, current_price=current_price, is_active=True)
+
+    @action(detail=False, methods=['get'], url_path='my-auctions')
+    def my_bids(self, request):
+        user = request.user
+        if not user.is_authenticated:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        auctions = AuctionPost.objects.filter(user=user)
+        serializer = self.get_serializer(auctions, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class BidViewSet(viewsets.ModelViewSet):

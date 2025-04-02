@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-8hio$x(jn%2=oz7hd*3k8k5t_fv%ru0obb!n7yqi91zyn*gl!6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -39,10 +39,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "api",
     "rest_framework",
-    "rest_framework_simplejwt"
+    "rest_framework_simplejwt",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -128,7 +130,7 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / 'collected_static'
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = "/backend_media"
+MEDIA_ROOT = BASE_DIR / 'backend_media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -145,3 +147,12 @@ REST_FRAMEWORK = {
 }
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 AUTH_USER_MODEL = 'api.User'
+
+# В продакшене лучше указывать конкретные домены
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # React-приложение
+    "http://127.0.0.1:3000",  # Локальный React
+]
+
+# Чтобы отправлять куки и авторизационные заголовки
+CORS_ALLOW_CREDENTIALS = True
