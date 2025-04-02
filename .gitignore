@@ -3,9 +3,9 @@
 __pycache__
 *.pyc
 .env
-backend_media/*
+backend_media/
 
-/node_modules/
+node_modules/
 /.pnp
 .pnp.js
 
