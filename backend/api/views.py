@@ -52,7 +52,7 @@ class BidViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['create']:
             return [permissions.IsAuthenticated()]
-        return [CanViewOwnOrAuctionOwnerBids()]
+        return [CanViewOwnOrAuctionOwnerBids(), permissions.IsAuthenticated()]
 
     def get_queryset(self):
         # По умолчанию возвращаем пустой QuerySet
