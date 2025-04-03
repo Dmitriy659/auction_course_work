@@ -2,7 +2,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from api.views import BidViewSet, UserViewSet, AuctionPostViewSet
+from api.views import BidViewSet, UserViewSet, AuctionPostViewSet, ProtectedEndpoint
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -19,6 +19,7 @@ router.register(r'users', UserViewSet)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include(router.urls)),
+    path("api/v1/protected-endpoint/", ProtectedEndpoint.as_view(), name="protected-endpoint"),
     path("password_reset/", csrf_exempt(auth_views.PasswordResetView.as_view()), name="password_reset"),
     path("password_reset/done/", auth_views.PasswordResetDoneView.as_view(), name="password_reset_done"),
     path('password_reset/confirm/<uidb64>/<token>/', csrf_exempt(auth_views.PasswordResetConfirmView.as_view()),

@@ -1,5 +1,7 @@
+// src/pages/Login.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { login } from "../api";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -9,22 +11,10 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/api/v1/token/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        localStorage.setItem("token", data.access);
-        navigate("/");
-      } else {
-        alert("Ошибка входа");
-      }
+      await login(username, password);
+      navigate("/");
     } catch (error) {
-      console.error(error);
+      alert("Ошибка входа");
     }
   };
 
@@ -34,7 +24,7 @@ export default function Login() {
       <form onSubmit={handleLogin}>
         <input
           type="text"
-          placeholder="username"
+          placeholder="Имя пользователя"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required

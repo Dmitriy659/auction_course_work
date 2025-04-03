@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function AuctionList() {
   const [auctions, setAuctions] = useState([]);
@@ -43,15 +44,13 @@ function AuctionList() {
     }
   };
 
+
+
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {auctions.map((auction) => (
           <div key={auction.id} className="border p-4 rounded shadow-md">
-            <h2 className="text-xl font-bold">{auction.title}</h2>
-            <p>{auction.description}</p>
-            <p>Цена: {auction.current_price} ₽</p>
-            <p>Город: {auction.city}</p>
             {auction.image ? (
               <img
                 src={`${auction.image}`}
@@ -63,6 +62,11 @@ function AuctionList() {
                 <span className="text-gray-500">Нет изображения</span>
               </div>
             )}
+            <h2 className="text-xl font-bold">{auction.title}</h2>
+            <p>{auction.description}</p>
+            <p>Цена: {auction.current_price} ₽</p>
+            <p>Город: {auction.city}</p>
+            <Link to={`/auctions/${auction.id}`}>Подробнее</Link>
           </div>
         ))}
       </div>

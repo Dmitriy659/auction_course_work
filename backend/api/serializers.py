@@ -8,7 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'password', 'city']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'password', 'city', 'telephone', 'telegram']
 
     def create(self, validated_data):
         # Извлекаем пароль из данных и создаем пользователя
@@ -27,12 +27,17 @@ class AuctionPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = AuctionPost
         fields = ['id', 'user', 'title', 'description', 'starting_price', 'current_price', 'end_date', 'start_date',
-                  'image', 'is_active']
+                  'image', 'is_active', 'city']
+
+    def validate(self, data):
+        # Получаем объект аукциона (если редактируем)
+        auction_post = self.instance
+        if auction_post and 'starting_price' in data and data['starting_price'] != auction_post.starting_price:
+            raise serializers.ValidationError("Стартовую цену нельзя изменить после создания аукциона.")
+        return data
 
     def create(self, validated_data):
         # Устанавливаем current_price в starting_price, если он не передан
-        print(validated_data['image'])
-        print(validated_data['is_active'])
         if 'current_price' not in validated_data:
             validated_data['current_price'] = validated_data.get('starting_price')
 
@@ -40,6 +45,14 @@ class AuctionPostSerializer(serializers.ModelSerializer):
         validated_data['user'] = self.context['request'].user
 
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        # Запрещаем изменение стартовой цены
+        if 'starting_price' in validated_data:
+            raise serializers.ValidationError("Стартовую цену нельзя изменить.")
+
+        # Оставляем только обновления для остальных полей
+        return super().update(instance, validated_data)
 
 
 class BidSerializer(serializers.ModelSerializer):
@@ -54,9 +67,15 @@ class BidSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         auction_post = data.get('auction_post')
 
+        if not auction_post:
+            raise serializers.ValidationError("Поста не существует")
+
         # Проверка: автор поста не может оставить заявку на свой пост
         if auction_post.user == user:
             raise serializers.ValidationError("Вы не можете оставить заявку на свой собственный пост.")
+
+        if data.get('amount') < max(auction_post.starting_price, auction_post.current_price):
+            raise serializers.ValidationError("Нельзя оставить заявку с ценой ниже текущей")
 
         # Проверка: пользователь уже оставил заявку на этот пост
         if Bid.objects.filter(user=user, auction_post=auction_post).exists():
@@ -66,6 +85,9 @@ class BidSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data['user'] = self.context['request'].user
+        auction_post = validated_data['auction_post']
+        auction_post.current_price = validated_data.get('amount')
+        auction_post.save()
         return super().create(validated_data)
 
 

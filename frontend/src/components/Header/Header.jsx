@@ -6,10 +6,60 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Проверяем токен в localStorage
+  const refreshAuthToken = async () => {
+    try {
+        const refreshToken = localStorage.getItem("refreshToken");
+        if (!refreshToken) throw new Error("Нет refresh токена");
+
+        const response = await fetch("http://localhost:8000/api/v1/token/refresh/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ refresh: refreshToken }),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            localStorage.setItem("token", data.access);
+            window.dispatchEvent(new Event("storage")); // Обновляем Header
+        } else {
+            handleLogout(); // Если рефреш не сработал, разлогиниваем
+        }
+    } catch (error) {
+        console.error("Ошибка обновления токена:", error);
+        handleLogout();
+    }
+  };
+
+  const checkAuth = async () => {
     const token = localStorage.getItem("token");
-    setIsLoggedIn(!!token);
+    if (!token) {
+        setIsLoggedIn(false);
+        return;
+    }
+
+    const response = await fetch("http://localhost:8000/api/v1/protected-endpoint/", {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (response.status === 401) {
+        await refreshAuthToken();
+    } else {
+        setIsLoggedIn(true);
+    }
+  };
+
+  useEffect(() => {
+      checkAuth();
+      window.addEventListener("storage", checkAuth);
+
+      return () => {
+          window.removeEventListener("storage", checkAuth);
+      };
   }, []);
 
   const handleLogout = () => {

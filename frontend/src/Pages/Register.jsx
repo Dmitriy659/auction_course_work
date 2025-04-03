@@ -1,5 +1,7 @@
+// src/pages/Register.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { register } from "../api";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -13,20 +15,10 @@ export default function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:8000/api/v1/users/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, username, password, first_name, last_name, city }),
-      });
-      if (response.ok) {
-        navigate("/login");
-      } else {
-        alert("Ошибка регистрации");
-      }
+      await register({ email, username, password, first_name, last_name, city });
+      navigate("/login");
     } catch (error) {
-      console.error(error);
+      alert("Ошибка регистрации");
     }
   };
 
@@ -51,21 +43,21 @@ export default function Register() {
         <input
           type="text"
           placeholder="Имя"
-          value={username}
+          value={first_name}
           onChange={(e) => setFirstName(e.target.value)}
           required
         />
         <input
           type="text"
           placeholder="Фамилия"
-          value={username}
+          value={last_name}
           onChange={(e) => setLastName(e.target.value)}
           required
         />
         <input
           type="text"
           placeholder="Город"
-          value={username}
+          value={city}
           onChange={(e) => setCity(e.target.value)}
           required
         />

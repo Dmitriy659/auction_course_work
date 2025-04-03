@@ -30,11 +30,27 @@ class UserViewSet(viewsets.ModelViewSet):
             return [IsOwnerOrAdmin()]
         return [permissions.IsAuthenticated()]
 
+    @action(detail=False, methods=['patch'], permission_classes=[IsOwnerOrAdmin()])
+    def update_me(self, request):
+        user = request.user
+        serializer = self.get_serializer(user, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'], permission_classes=[IsOwnerOrAdmin()])
+    def get_me(self, request):
+        user = request.user
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
+
 
 class AuctionPostViewSet(viewsets.ModelViewSet):
     queryset = AuctionPost.objects.all()
     serializer_class = AuctionPostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     pagination_class = TenPostsPagination
 
     def perform_create(self, serializer):
@@ -125,3 +141,10 @@ class PasswordResetRequestView(APIView):
                             status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({"error": "Пользователь с таким email не найден."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProtectedEndpoint(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        return Response({"message": "Токен действителен"}, status=200)

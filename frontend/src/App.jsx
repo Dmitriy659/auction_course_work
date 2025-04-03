@@ -7,6 +7,9 @@ import Register from "./Pages/Register.jsx";
 import Home from "./Pages/Home.jsx";
 import MyAuctionsPage from "./Pages/MyAuctionPages.jsx";
 import CreateAuction from "./Pages/CreateAuction.jsx";
+import EditAuctionPage from "./Pages/EditAuction/EditAuction.jsx";
+import EditUserPage from "./Pages/User/EditProfile.jsx";
+import AuctionDetailsPage from "./Pages/AuctionPage/AuctionPage.jsx";
 
 function App() {
   return (
@@ -18,8 +21,11 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="my-auctions" element={<MyAuctionsPage />} />
             <Route path="create-auction" element={<CreateAuction />} />
+            <Route path="edit-auction/:id" element={<EditAuctionPage />}/>
+            <Route path="auctions/:id" element={<AuctionDetailsPage />}/>
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<EditUserPage />} />
           </Routes>
         </main>
       </div>

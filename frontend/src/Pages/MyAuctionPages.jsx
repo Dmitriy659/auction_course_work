@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getUserAuctions } from "../api";
+import { deleteAuction, getUserAuctions } from "../api";
 import { data, Link } from "react-router-dom";
 
 
@@ -9,16 +9,30 @@ const MyAuctionsPage = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        getUserAuctions()
-          .then(data => {
-            setAuctions(data); // Успех: сохраняем аукционы
-            setLoading(false);        // Выключаем загрузку
-          })
-          .catch(error => {
-            setError('Не удалось загрузить аукционы'); // Ошибка
+      loadAuctions();
+    }, []);
+
+    const loadAuctions = async () => {
+        try {
+            const data = await getUserAuctions();
+            setAuctions(data);
             setLoading(false);
-          });
-      }, []);
+        } catch {
+            setError('Не удалось загрузить аукционы');
+            setLoading(false);
+        }
+    };
+
+    const handleDelete = async (auctionId) => {
+      if (!window.confirm("Вы уверены, что хотите удалить этот аукцион?")) return;
+      try {
+        await deleteAuction(auctionId);
+        setAuctions(auctions.filter(auction => auction.id !== auctionId));
+      }
+      catch (error) {
+        alert("Ошибка при удалении аукциона");
+      }
+    };
 
     if (loading) return <p>Загрузка...</p>;
     if (error) return <p>{error}</p>;
@@ -39,6 +53,8 @@ const MyAuctionsPage = () => {
                 <p>Дата начала: {new Date(auction.start_date).toLocaleString()}</p>
                 <p>Активность: {auction.is_active ? 'Активен' : 'Завершен'}</p>
                 <img src={auction.image} alt={auction.title} width="100" />
+                <button onClick={() => handleDelete(auction.id)}>Удалить</button>
+                <Link to={`/edit-auction/${auction.id}`}><button>Редактировать</button></Link>
               </div>
             ))}
           </div>
