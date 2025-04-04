@@ -76,6 +76,7 @@ export default function Header() {
           <>
             <Link to="/profile" className="mr-4">Профиль</Link>
             <Link to="/my-auctions" className="mr-4">Мои аукционы</Link>
+            <Link to="/my-bids">Мои заявки</Link>
             <button onClick={handleLogout}>Выйти</button>
           </>
         ) : (

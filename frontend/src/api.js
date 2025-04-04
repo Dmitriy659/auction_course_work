@@ -147,4 +147,34 @@ export const createBid = async (auctionId, amount) => {
   return response.data;
 };
 
+export const getMyBids = async () => {
+  try {
+    const response = await api.get("/bids/my-bids/");
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при получении ваших заявок:", error);
+    return [];
+  }
+};
+
+export const deleteBid = async(bidId) => {
+  try {
+    const response = await api.delete(`/bids/${bidId}/`);
+    return response;
+  }
+  catch (error) {
+    console.log("Ошибка при удалении заявки");
+  }
+};
+
+export const getAuctionBids = async (auctionId) => {
+  try {
+      const response = await api.get(`/bids/auction-bids/${auctionId}/`);
+      return response.data;
+  } catch (error) {
+      console.error("Ошибка при получении заявок аукциона:", error);
+  }
+};
+
+
 export default api;

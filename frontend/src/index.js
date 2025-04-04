@@ -7,7 +7,5 @@ const rootElement = document.getElementById('root'); // Проверяем на�
 const root = ReactDOM.createRoot(rootElement);
 
 root.render(
-  <React.StrictMode>
     <App />
-  </React.StrictMode>
 );

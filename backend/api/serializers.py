@@ -3,6 +3,12 @@ from rest_framework import serializers
 from .models import User, Bid, AuctionPost
 
 
+class AuctionPostSerializerCropped(serializers.ModelSerializer):
+    class Meta:
+        model = AuctionPost
+        fields = ['id', 'title', 'description']
+
+
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -27,7 +33,7 @@ class AuctionPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = AuctionPost
         fields = ['id', 'user', 'title', 'description', 'starting_price', 'current_price', 'end_date', 'start_date',
-                  'image', 'is_active', 'city']
+                  'image', 'city']
 
     def validate(self, data):
         # Получаем объект аукциона (если редактируем)
@@ -57,11 +63,17 @@ class AuctionPostSerializer(serializers.ModelSerializer):
 
 class BidSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-    auction_post = serializers.PrimaryKeyRelatedField(queryset=AuctionPost.objects.all())
+    auction_post = serializers.PrimaryKeyRelatedField(
+        queryset=AuctionPost.objects.all(), write_only=True
+    )
+    auction_post_data = AuctionPostSerializerCropped(source='auction_post', read_only=True)
 
     class Meta:
         model = Bid
-        fields = ['id', 'auction_post', 'user', 'amount', 'create_time']
+        fields = ['id', 'auction_post_data', 'auction_post', 'user', 'amount', 'create_time']
+        extra_kwargs = {
+            'auction_post': {'write_only': True}
+        }
 
     def validate(self, data):
         user = self.context['request'].user

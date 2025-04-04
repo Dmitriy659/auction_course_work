@@ -1,11 +1,13 @@
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.utils.http import urlsafe_base64_encode
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, filters
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied, NotFound
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.contrib.auth.tokens import default_token_generator
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import User, AuctionPost, Bid
 from .serializers import UserSerializer, AuctionPostSerializer, BidSerializer
@@ -52,16 +54,18 @@ class AuctionPostViewSet(viewsets.ModelViewSet):
     serializer_class = AuctionPostSerializer
     permission_classes = [IsOwnerOrReadOnly]
     pagination_class = TenPostsPagination
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['title', 'description', 'city']
 
     def perform_create(self, serializer):
         # Устанавливаем current_price в starting_price, если не передан
         starting_price = serializer.validated_data.get('starting_price')
         current_price = serializer.validated_data.get('current_price', starting_price)
 
-        serializer.save(user=self.request.user, current_price=current_price, is_active=True)
+        serializer.save(user=self.request.user, current_price=current_price)
 
     @action(detail=False, methods=['get'], url_path='my-auctions')
-    def my_bids(self, request):
+    def my_auctions(self, request):
         user = request.user
         if not user.is_authenticated:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -80,8 +84,36 @@ class BidViewSet(viewsets.ModelViewSet):
         return [CanViewOwnOrAuctionOwnerBids(), permissions.IsAuthenticated()]
 
     def get_queryset(self):
-        # По умолчанию возвращаем пустой QuerySet
-        return Bid.objects.none()
+        user = self.request.user
+        return Bid.objects.filter(user=user) | Bid.objects.filter(auction_post__user=user)
+
+    def update(self, request, *args, **kwargs):
+        raise PermissionDenied("Изменение заявок запрещено.")
+
+    def partial_update(self, request, *args, **kwargs):
+        raise PermissionDenied("Частичное изменение заявок запрещено.")
+
+    def destroy(self, request, *args, **kwargs):
+        user = request.user
+        try:
+            bid = self.get_object()  # Получаем объект заявки через DRF
+        except Bid.DoesNotExist:
+            raise NotFound("Заявка не найдена.")
+
+        if bid.user != user:
+            raise PermissionDenied("Вы можете удалить только свою заявку.")
+
+        auction_post = bid.auction_post
+        bid.delete()
+        bids = Bid.objects.filter(auction_post=auction_post)
+        if bids.exists():
+            new_price = bids.order_by('-amount').first().amount
+        else:
+            new_price = auction_post.starting_price
+
+        auction_post.current_price = new_price
+        auction_post.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     # Получить свои заявки на чужие аукционы
     @action(detail=False, methods=['get'], url_path='my-bids')
@@ -104,7 +136,7 @@ class BidViewSet(viewsets.ModelViewSet):
             return Response({"detail": "Вы не являетесь автором этого поста."}, status=status.HTTP_403_FORBIDDEN)
 
         # Получаем заявки на пост
-        bids = Bid.objects.filter(auction_post=auction_post)
+        bids = Bid.objects.filter(auction_post=auction_post).order_by('-amount')
         serializer = self.get_serializer(bids, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

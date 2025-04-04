@@ -9,13 +9,15 @@ export default function Register() {
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [city, setCity] = useState("");
+  const [telephone, setTelephone] = useState("");
+  const [telegram, setTelegram] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await register({ email, username, password, first_name, last_name, city });
+      await register({ email, username, password, first_name, last_name, city, telephone, telegram });
       navigate("/login");
     } catch (error) {
       alert("Ошибка регистрации");
@@ -59,6 +61,20 @@ export default function Register() {
           placeholder="Город"
           value={city}
           onChange={(e) => setCity(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Телефон"
+          value={telephone}
+          onChange={(e) => setTelephone(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Телеграм"
+          value={telegram}
+          onChange={(e) => setTelegram(e.target.value)}
           required
         />
         <input

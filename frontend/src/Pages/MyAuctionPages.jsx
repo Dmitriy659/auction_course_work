@@ -51,10 +51,10 @@ const MyAuctionsPage = () => {
                 <p>{auction.description}</p>
                 <p>Текущая цена: ${auction.current_price}</p>
                 <p>Дата начала: {new Date(auction.start_date).toLocaleString()}</p>
-                <p>Активность: {auction.is_active ? 'Активен' : 'Завершен'}</p>
                 <img src={auction.image} alt={auction.title} width="100" />
                 <button onClick={() => handleDelete(auction.id)}>Удалить</button>
                 <Link to={`/edit-auction/${auction.id}`}><button>Редактировать</button></Link>
+                <Link to={`/myauction-bids/${auction.id}`}>Заявки на аукцион</Link>
               </div>
             ))}
           </div>

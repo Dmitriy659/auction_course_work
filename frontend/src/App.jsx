@@ -10,6 +10,8 @@ import CreateAuction from "./Pages/CreateAuction.jsx";
 import EditAuctionPage from "./Pages/EditAuction/EditAuction.jsx";
 import EditUserPage from "./Pages/User/EditProfile.jsx";
 import AuctionDetailsPage from "./Pages/AuctionPage/AuctionPage.jsx";
+import MyBidsPage from "./Pages/MyBids/MyBids.jsx";
+import AuctionBidsPage from "./Pages/AuctionBids/AuctionBids.jsx";
 
 function App() {
   return (
@@ -19,13 +21,15 @@ function App() {
         <main className="p-4">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="my-auctions" element={<MyAuctionsPage />} />
-            <Route path="create-auction" element={<CreateAuction />} />
-            <Route path="edit-auction/:id" element={<EditAuctionPage />}/>
-            <Route path="auctions/:id" element={<AuctionDetailsPage />}/>
+            <Route path="/my-auctions" element={<MyAuctionsPage />} />
+            <Route path="/create-auction" element={<CreateAuction />} />
+            <Route path="/edit-auction/:id" element={<EditAuctionPage />}/>
+            <Route path="/auctions/:id" element={<AuctionDetailsPage />}/>
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<EditUserPage />} />
+            <Route path="/my-bids" element={<MyBidsPage />} />
+            <Route path="/myauction-bids/:id" element={<AuctionBidsPage />} />
           </Routes>
         </main>
       </div>
