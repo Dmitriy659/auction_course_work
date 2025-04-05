@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "corsheaders",
     'django_filters',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -160,7 +161,7 @@ CORS_ALLOWED_ORIGINS = [
 CORS_ALLOW_CREDENTIALS = True
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1), # Время жизни access-токена
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=3), # Время жизни access-токена
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),    # Время жизни refresh-токена
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,

@@ -23,6 +23,49 @@ api.interceptors.request.use(
     }
 );
 
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url.includes("token/refresh")
+    ) {
+      originalRequest._retry = true;
+
+      try {
+        const refreshToken = localStorage.getItem("refreshToken");
+
+        if (!refreshToken) {
+          throw new Error("No refresh token available");
+        }
+
+        const response = await axios.post("http://localhost:8000/api/v1/token/refresh/", {
+          refresh: refreshToken,
+        });
+
+        const newAccessToken = response.data.access;
+
+        localStorage.setItem("token", newAccessToken);
+        api.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+
+        return api(originalRequest);
+      } catch (refreshError) {
+        console.warn("Refresh token expired or invalid:", refreshError);
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        window.location.href = "/login"; // редирект на логин
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 export const getAuctions = async (url = "/auctions/") => {
   try {
     const response = await api.get(url);
@@ -43,6 +86,11 @@ export const searchAuctions = async (query) => {
     console.error("Ошибка при поиске аукционов:", error);
     throw error;
   }
+};
+
+export const logout = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("refreshToken");
 };
 
 export const login = async (username, password) => {
@@ -197,40 +245,41 @@ export const getAuctionBids = async (auctionId) => {
   }
 };
 
-export const refreshAuthToken = async () => {
-  try {
-    const refreshToken = localStorage.getItem("refreshToken");
-    if (!refreshToken) throw new Error("Нет refresh токена");
+// export const refreshAuthToken = async () => {
+//   try {
+//     const refreshToken = localStorage.getItem("refreshToken");
+//     if (!refreshToken) throw new Error("Нет refresh токена");
 
-    const response = await api.post("/token/refresh/", {
-      refresh: refreshToken,
-    });
+//     const response = await api.post("/token/refresh/", {
+//       refresh: refreshToken,
+//     });
 
-    const data = response.data;
-    if (data.access) {
-      localStorage.setItem("token", data.access);
-      window.dispatchEvent(new Event("storage")); // Обновляем Header
-    } else {
-      throw new Error("Не удалось обновить токен");
-    }
-  } catch (error) {
-    console.error("Ошибка обновления токена:", error);
-    throw error;
-  }
-};
+//     const data = response.data;
+//     if (data.access) {
+//       alert(data.access);
+//       localStorage.setItem("token", data.access);
+//       window.dispatchEvent(new Event("storage")); // Обновляем Header
+//     } else {
+//       throw new Error("Не удалось обновить токен");
+//     }
+//   } catch (error) {
+//     console.error("Ошибка обновления токена:", error);
+//     throw error;
+//   }
+// };
 
-// Функция для проверки авторизации
-export const checkAuth = async () => {
-  const token = localStorage.getItem("token");
-  if (!token) return false;
+// // Функция для проверки авторизации
+// export const checkAuth = async () => {
+//   const token = localStorage.getItem("token");
+//   if (!token) return false;
 
-  try {
-    const response = await api.get("/protected-endpoint/");
-    return response.status === 200;
-  } catch (error) {
-    return false;
-  }
-};
+//   try {
+//     const response = await api.get("/protected-endpoint/");
+//     return response.status === 200;
+//   } catch (error) {
+//     return false;
+//   }
+// };
 
 
 export default api;

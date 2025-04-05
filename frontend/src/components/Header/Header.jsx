@@ -1,53 +1,46 @@
 // src/components/Header.jsx
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { checkAuth, refreshAuthToken } from "../../api"; // Импортируем функции
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, logout, setIsLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
-    setIsLoggedIn(false);
+    logout(); // вызывает apiLogout и setIsLoggedIn(false)
     navigate("/login");
   };
 
   useEffect(() => {
-    const verifyAuth = async () => {
-      const isAuthenticated = await checkAuth();
-      if (isAuthenticated) {
-        setIsLoggedIn(true);
-      } else {
-        await refreshAuthToken();
-        const isAuthenticatedAfterRefresh = await checkAuth();
-        setIsLoggedIn(isAuthenticatedAfterRefresh);
-      }
+    const syncLoginStatus = () => {
+      const token = localStorage.getItem("token");
+      setIsLoggedIn(!!token); // синхронизировать при изменении в других вкладках
     };
 
-    verifyAuth();
-    window.addEventListener("storage", verifyAuth);
-
-    return () => {
-      window.removeEventListener("storage", verifyAuth);
-    };
-  }, []);
+    window.addEventListener("storage", syncLoginStatus);
+    return () => window.removeEventListener("storage", syncLoginStatus);
+  }, [setIsLoggedIn]);
 
   return (
-    <header className="p-4 bg-gray-800 text-white flex justify-between">
+    <header className="p-4 bg-gray-800 text-white flex justify-between items-center">
       <h1 className="text-xl font-bold">Аукцион</h1>
-      <div>
+      <div className="flex items-center space-x-4">
         {isLoggedIn ? (
           <>
-            <Link to="/profile" className="mr-4">Профиль</Link>
-            <Link to="/my-auctions" className="mr-4">Мои аукционы</Link>
+            <Link to="/profile">Профиль</Link>
+            <Link to="/my-auctions">Мои аукционы</Link>
             <Link to="/my-bids">Мои заявки</Link>
-            <button onClick={handleLogout}>Выйти</button>
+            <button
+              onClick={handleLogout}
+              className="ml-4 bg-red-500 px-3 py-1 rounded hover:bg-red-600 transition"
+            >
+              Выйти
+            </button>
           </>
         ) : (
           <>
-            <Link to="/login" className="mr-4">Войти</Link>
+            <Link to="/login">Войти</Link>
             <Link to="/register">Регистрация</Link>
           </>
         )}
