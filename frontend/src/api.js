@@ -21,7 +21,29 @@ api.interceptors.request.use(
     (error) => {
       return Promise.reject(error);
     }
-  );
+);
+
+export const getAuctions = async (url = "/auctions/") => {
+  try {
+    const response = await api.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при получении аукционов:", error);
+    throw error;
+  }
+};
+
+// Функция для поиска аукционов
+export const searchAuctions = async (query) => {
+  try {
+    const url = `/auctions/?search=${encodeURIComponent(query)}`;
+    const response = await api.get(url);
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при поиске аукционов:", error);
+    throw error;
+  }
+};
 
 export const login = async (username, password) => {
   try {
@@ -86,7 +108,6 @@ export const deleteAuction = async (auctionId) => {
 export const updateAuction = async (auctionId, auctionData) => {
   try {
       const formData = new FormData();
-      
       for (const key in auctionData) {
           if (auctionData[key] !== null) {
               formData.append(key, auctionData[key]);
@@ -173,6 +194,41 @@ export const getAuctionBids = async (auctionId) => {
       return response.data;
   } catch (error) {
       console.error("Ошибка при получении заявок аукциона:", error);
+  }
+};
+
+export const refreshAuthToken = async () => {
+  try {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (!refreshToken) throw new Error("Нет refresh токена");
+
+    const response = await api.post("/token/refresh/", {
+      refresh: refreshToken,
+    });
+
+    const data = response.data;
+    if (data.access) {
+      localStorage.setItem("token", data.access);
+      window.dispatchEvent(new Event("storage")); // Обновляем Header
+    } else {
+      throw new Error("Не удалось обновить токен");
+    }
+  } catch (error) {
+    console.error("Ошибка обновления токена:", error);
+    throw error;
+  }
+};
+
+// Функция для проверки авторизации
+export const checkAuth = async () => {
+  const token = localStorage.getItem("token");
+  if (!token) return false;
+
+  try {
+    const response = await api.get("/protected-endpoint/");
+    return response.status === 200;
+  } catch (error) {
+    return false;
   }
 };
 

@@ -26,9 +26,12 @@ const EditAuctionPage = () => {
             const auctions = await getUserAuctions();
             const auctionToEdit = auctions.find((auction) => auction.id === parseInt(id));
             if (auctionToEdit) {
+                const { title, description, city, image } = auctionToEdit;
                 setAuction({
-                    ...auctionToEdit,
-                    image: null // Сбрасываем файл изображения
+                    title,
+                    description,
+                    city,
+                    image: null
                 });
             } else {
                 setError("Аукцион не найден");
@@ -42,7 +45,7 @@ const EditAuctionPage = () => {
 
     // Обработка изменений в форме
     const handleChange = (e) => {
-        const { name, value, type, checked, files } = e.target;
+        const { name, value, type, files } = e.target;
         if (type === "file") {
             setAuction({ ...auction, [name]: files[0] });
         }

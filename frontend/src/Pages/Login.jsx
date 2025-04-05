@@ -38,6 +38,11 @@ export default function Login() {
         />
         <button type="submit">Войти</button>
       </form>
+      <div className="mt-4">
+        <a href="http://localhost:8000/password_reset/" className="text-blue-500 hover:underline">
+          Забыли пароль?
+        </a>
+      </div>
     </div>
   );
 }

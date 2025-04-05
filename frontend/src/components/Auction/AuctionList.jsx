@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import { getAuctions, searchAuctions } from "../../api"; // Импортируем функции из api.js
 
 function AuctionList() {
   const [auctions, setAuctions] = useState([]);
@@ -8,12 +8,12 @@ function AuctionList() {
   const [previousPage, setPreviousPage] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const fetchAuctions = async (url = "http://localhost:8000/api/v1/auctions/") => {
+  const fetchAuctions = async (url = "/auctions/") => {
     try {
-      const response = await axios.get(url);
-      setAuctions(response.data.results);
-      setNextPage(response.data.next);
-      setPreviousPage(response.data.previous);
+      const data = await getAuctions(url);  // Используем функцию getAuctions из api.js
+      setAuctions(data.results);
+      setNextPage(data.next);
+      setPreviousPage(data.previous);
     } catch (error) {
       console.error("Ошибка при загрузке аукционов:", error);
     }
@@ -25,8 +25,14 @@ function AuctionList() {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    const url = `http://localhost:8000/api/v1/auctions/?search=${encodeURIComponent(searchQuery)}`;
-    fetchAuctions(url);
+    try {
+      const data = await searchAuctions(searchQuery); // Используем функцию searchAuctions из api.js
+      setAuctions(data.results);
+      setNextPage(data.next);
+      setPreviousPage(data.previous);
+    } catch (error) {
+      console.error("Ошибка при поиске аукционов:", error);
+    }
   };
 
   const handleNextPage = () => {
