@@ -1,7 +1,8 @@
 // src/pages/Register.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { register } from "../api";
+import { register } from "../../api";
+import "./Register.css";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -25,9 +26,9 @@ export default function Register() {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold">Регистрация</h2>
-      <form onSubmit={handleRegister}>
+    <div className="register-container">
+      <h2 className="register-title">Регистрация</h2>
+      <form onSubmit={handleRegister} className="register-form">
         <input
           type="email"
           placeholder="Email"
@@ -84,7 +85,9 @@ export default function Register() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Зарегистрироваться</button>
+        <button type="submit" className="register-button">
+          Зарегистрироваться
+        </button>
       </form>
     </div>
   );

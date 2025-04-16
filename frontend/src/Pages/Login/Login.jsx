@@ -1,7 +1,8 @@
 // src/pages/Login.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../api";
+import { login } from "../../api";
+import "./Login.css";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -19,9 +20,9 @@ export default function Login() {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold">Войти</h2>
-      <form onSubmit={handleLogin}>
+    <div className="login-container">
+      <h2 className="login-title">Войти</h2>
+      <form onSubmit={handleLogin} className="login-form">
         <input
           type="text"
           placeholder="Имя пользователя"
@@ -36,12 +37,10 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Войти</button>
+        <button type="submit" className="login-button">Войти</button>
       </form>
-      <div className="mt-4">
-        <a href="http://localhost:8000/password_reset/" className="text-blue-500 hover:underline">
-          Забыли пароль?
-        </a>
+      <div className="login-reset">
+        <a href="http://localhost:8000/password_reset/">Забыли пароль?</a>
       </div>
     </div>
   );

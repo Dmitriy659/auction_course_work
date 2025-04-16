@@ -2,6 +2,8 @@
 import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import "./Header.css";
+
 
 export default function Header() {
   const { isLoggedIn, logout, setIsLoggedIn } = useContext(AuthContext);
@@ -23,28 +25,30 @@ export default function Header() {
   }, [setIsLoggedIn]);
 
   return (
-    <header className="p-4 bg-gray-800 text-white flex justify-between items-center">
-      <h1 className="text-xl font-bold">Аукцион</h1>
-      <div className="flex items-center space-x-4">
+    <header className="header">
+      <div className="header__title-container">
+        <Link to="/">
+          <img src="/logo.jpg" alt="Аукцион" className="header__icon" />
+        </Link>
+        <h1 className="header__title">Аукцион</h1>
+      </div>
+      <div className="header__nav">
         {isLoggedIn ? (
           <>
-            <Link to="/profile">Профиль</Link>
-            <Link to="/my-auctions">Мои аукционы</Link>
-            <Link to="/my-bids">Мои заявки</Link>
-            <button
-              onClick={handleLogout}
-              className="ml-4 bg-red-500 px-3 py-1 rounded hover:bg-red-600 transition"
-            >
-              Выйти
-            </button>
+            <Link to="/profile" className="header__link">Профиль</Link>
+            <Link to="/my-auctions" className="header__link">Мои аукционы</Link>
+            <Link to="/my-bids" className="header__link">Мои заявки</Link>
+            <button onClick={handleLogout} className="header__button">Выйти</button>
           </>
         ) : (
           <>
-            <Link to="/login">Войти</Link>
-            <Link to="/register">Регистрация</Link>
+            <Link to="/login" className="header__link">Войти</Link>
+            <Link to="/register" className="header__link">Регистрация</Link>
           </>
         )}
       </div>
     </header>
+
+
   );
 }

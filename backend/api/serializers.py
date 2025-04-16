@@ -36,7 +36,6 @@ class AuctionPostSerializer(serializers.ModelSerializer):
                   'image', 'city']
 
     def validate(self, data):
-        print(data)
         # Получаем объект аукциона (если редактируем)
         auction_post = self.instance
         if auction_post and 'starting_price' in data and data['starting_price'] != auction_post.starting_price:

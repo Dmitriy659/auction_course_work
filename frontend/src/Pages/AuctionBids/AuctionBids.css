@@ -1,0 +1,68 @@
+/* Контейнер для заявок на аукцион */
+.auction-bid-container {
+    padding: 20px;
+    background-color: #f9fafb; /* Светлый фон */
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Заголовок для заявок */
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #111827;
+    text-align: center;
+  }
+  
+  /* Стили для списка заявок */
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  /* Каждый элемент заявки */
+  li {
+    padding: 16px;
+    margin-bottom: 12px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  li p {
+    margin: 0;
+    font-size: 14px;
+    color: #4b5563;
+  }
+  
+  /* Информация о пользователе */
+  li p:first-child {
+    font-weight: 600;
+    color: #111827;
+  }
+  
+  /* Контактная информация */
+  li p:last-child {
+    font-weight: 600;
+    color: #2563eb;
+    margin-top: 12px;
+  }
+  
+  /* Контакты пользователя */
+  li p + p {
+    font-weight: 400;
+    color: #4b5563;
+  }
+  
+  /* Подсветка для контактов */
+  li p + p:hover {
+    color: #2563eb;
+  }
+  

@@ -1,7 +1,8 @@
 // src/pages/CreateAuction.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createAuction } from "../api";
+import { createAuction } from "../../api";
+import "./CreateAuction.css";
 
 export default function CreateAuction() {
   const [title, setTitle] = useState("");
@@ -34,22 +35,24 @@ export default function CreateAuction() {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold">Создать аукцион</h2>
-      {error && <div className="text-red-500 mb-4">{error}</div>}
-      <form onSubmit={handleCreateAuction}>
+    <div className="create-auction-container">
+      <h2 className="page-title">Создать аукцион</h2>
+      {error && <div className="error-message">{error}</div>}
+      <form onSubmit={handleCreateAuction} className="auction-form">
         <input
           type="text"
           placeholder="Название"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
+          className="form-input"
         />
         <textarea
           placeholder="Описание"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
+          className="form-textarea"
         />
         <input
           type="number"
@@ -57,6 +60,7 @@ export default function CreateAuction() {
           value={startingPrice}
           onChange={(e) => setStartingPrice(e.target.value)}
           required
+          className="form-input"
         />
         <input
           type="text"
@@ -64,15 +68,17 @@ export default function CreateAuction() {
           value={city}
           onChange={(e) => setCity(e.target.value)}
           required
+          className="form-input"
         />
         <input
           type="file"
           accept="image/*"
           onChange={(e) => setImage(e.target.files[0])}
           required
+          className="form-input-file"
         />
-        <button type="submit">Создать</button>
+        <button type="submit" className="submit-button">Создать</button>
       </form>
     </div>
-  );
+  )
 }

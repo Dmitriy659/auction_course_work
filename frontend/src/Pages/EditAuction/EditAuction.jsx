@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { updateAuction, getUserAuctions } from "../../api";
+import "./EditAuction.css";
 
 const EditAuctionPage = () => {
     const { id } = useParams();
@@ -69,40 +70,45 @@ const EditAuctionPage = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div>
-            <h1>Редактировать аукцион</h1>
-            <form onSubmit={handleSubmit}>
+        <div className="edit-auction-container">
+            <h1 className="page-title">Редактировать аукцион</h1>
+            <form onSubmit={handleSubmit} className="auction-form">
                 <input
-                    type="text"
-                    name="title"
-                    placeholder="Заголовок"
-                    value={auction.title}
-                    onChange={handleChange}
-                    required
+                type="text"
+                name="title"
+                placeholder="Заголовок"
+                value={auction.title}
+                onChange={handleChange}
+                required
+                className="form-input"
                 />
                 <textarea
-                    name="description"
-                    placeholder="Описание"
-                    value={auction.description}
-                    onChange={handleChange}
-                    required
+                name="description"
+                placeholder="Описание"
+                value={auction.description}
+                onChange={handleChange}
+                required
+                className="form-textarea"
                 />
                 <input
-                    type="text"
-                    name="city"
-                    placeholder="Город"
-                    value={auction.city}
-                    onChange={handleChange}
-                    required
+                type="text"
+                name="city"
+                placeholder="Город"
+                value={auction.city}
+                onChange={handleChange}
+                required
+                className="form-input"
                 />
                 <input
-                    type="file"
-                    name="image"
-                    onChange={handleChange}
+                type="file"
+                name="image"
+                onChange={handleChange}
+                className="form-input-file"
                 />
-                <button type="submit">Сохранить</button>
+                <button type="submit" className="submit-button">Сохранить</button>
             </form>
-        </div>
+            </div>
+
     );
 };
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateUser, getUserData } from "../../api";
+import "./EditProfile.css";
 
 const EditUserPage = () => {
     const navigate = useNavigate();
@@ -56,70 +57,76 @@ const EditUserPage = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div>
-            <h1>Редактировать данные пользователя</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Имя
-                    <input
-                        type="text"
-                        name="first_name"
-                        value={userData.first_name}
-                        onChange={handleChange}
-                        required
-                    />
+        <div className="edit-user-container">
+            <h1 className="page-title">Редактировать данные пользователя</h1>
+            <form onSubmit={handleSubmit} className="user-edit-form">
+                <label className="input-label">
+                Имя
+                <input
+                    type="text"
+                    name="first_name"
+                    value={userData.first_name}
+                    onChange={handleChange}
+                    required
+                    className="input-field"
+                />
                 </label>
-                <label>
-                    Фамилия
-                    <input
-                        type="text"
-                        name="last_name"
-                        value={userData.last_name}
-                        onChange={handleChange}
-                        required
-                    />
+                <label className="input-label">
+                Фамилия
+                <input
+                    type="text"
+                    name="last_name"
+                    value={userData.last_name}
+                    onChange={handleChange}
+                    required
+                    className="input-field"
+                />
                 </label>
-                <label>
-                    Email
-                    <input
-                        type="email"
-                        name="email"
-                        value={userData.email}
-                        onChange={handleChange}
-                        required
-                    />
+                <label className="input-label">
+                Email
+                <input
+                    type="email"
+                    name="email"
+                    value={userData.email}
+                    onChange={handleChange}
+                    required
+                    className="input-field"
+                />
                 </label>
-                <label>
-                    Город
-                    <input
-                        type="text"
-                        name="city"
-                        value={userData.city}
-                        onChange={handleChange}
-                    />
+                <label className="input-label">
+                Город
+                <input
+                    type="text"
+                    name="city"
+                    value={userData.city}
+                    onChange={handleChange}
+                    className="input-field"
+                />
                 </label>
-                <label>
-                    Телефон
-                    <input
-                        type="tel"
-                        name="telephone"
-                        value={userData.telephone || ""}
-                        onChange={handleChange}
-                    />
+                <label className="input-label">
+                Телефон
+                <input
+                    type="tel"
+                    name="telephone"
+                    value={userData.telephone || ""}
+                    onChange={handleChange}
+                    className="input-field"
+                />
                 </label>
-                <label>
-                    Telegram
-                    <input
-                        type="text"
-                        name="telegram"
-                        value={userData.telegram || ""}
-                        onChange={handleChange}
-                    />
+                <label className="input-label">
+                Telegram
+                <input
+                    type="text"
+                    name="telegram"
+                    value={userData.telegram || ""}
+                    onChange={handleChange}
+                    className="input-field"
+                />
                 </label>
-                <button type="submit">Сохранить</button>
+                <button type="submit" className="save-button">Сохранить</button>
             </form>
-        </div>
-    );
+            </div>
+    )
 };
 
 export default EditUserPage;

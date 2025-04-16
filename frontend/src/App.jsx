@@ -1,11 +1,11 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Header from "./components/Header/Header.jsx";
-import Login from "./Pages/Login.jsx";
-import Register from "./Pages/Register.jsx";
-import Home from "./Pages/Home.jsx";
-import MyAuctionsPage from "./Pages/MyAuctionPages.jsx";
-import CreateAuction from "./Pages/CreateAuction.jsx";
+import Login from "./Pages/Login/Login.jsx";
+import Register from "./Pages/Register/Register.jsx";
+import Home from "./Pages/HomePage/Home.jsx";
+import MyAuctionsPage from "./Pages/MyAuctions/MyAuctionPages.jsx";
+import CreateAuction from "./Pages/CreateAuction/CreateAuction.jsx";
 import EditAuctionPage from "./Pages/EditAuction/EditAuction.jsx";
 import EditUserPage from "./Pages/User/EditProfile.jsx";
 import AuctionDetailsPage from "./Pages/AuctionPage/AuctionPage.jsx";

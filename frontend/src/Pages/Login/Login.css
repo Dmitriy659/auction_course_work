@@ -1,0 +1,71 @@
+/* src/pages/Login.css */
+
+.login-container {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 32px;
+    background-color: #f9fafb;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .login-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 24px;
+    text-align: center;
+    color: #111827;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .login-form input {
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.2s;
+  }
+  
+  .login-form input:focus {
+    outline: none;
+    border-color: #3b82f6; /* синий при фокусе */
+  }
+  
+  .login-button {
+    padding: 12px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .login-button:hover {
+    background-color: #2563eb;
+  }
+  
+  .login-reset {
+    margin-top: 16px;
+    text-align: center;
+  }
+  
+  .login-reset a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  
+  .login-reset a:hover {
+    text-decoration: underline;
+    color: #2563eb;
+  }
+  

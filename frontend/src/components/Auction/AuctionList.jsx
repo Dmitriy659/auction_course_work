@@ -46,58 +46,56 @@ function AuctionList() {
   return (
     <div>
       {/* 🔍 Поисковая форма */}
-      <form onSubmit={handleSearch} className="mb-4 flex gap-2">
+      <form onSubmit={handleSearch} className="search-form">
         <input
           type="text"
           placeholder="Поиск по заголовку или городу"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="p-2 border rounded w-full"
+          className="search-input"
         />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+        <button type="submit" className="search-button">
           Найти
         </button>
       </form>
 
       {/* 📦 Список аукционов */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {auctions.map((auction) => (
-          <div key={auction.id} className="border p-4 rounded shadow-md">
+          <div key={auction.id} className="auction-card">
             {auction.image ? (
               <img
                 src={auction.image}
                 alt={auction.title}
-                className="w-full h-48 object-cover rounded mb-2"
-                width={200}
-                height={200}
+                className="auction-image"
               />
             ) : (
-              <div className="w-full h-48 bg-gray-200 rounded mb-2 flex items-center justify-center">
-                <span className="text-gray-500">Нет изображения</span>
-              </div>
+              <div className="auction-placeholder">Нет изображения</div>
             )}
-            <h2 className="text-xl font-bold">{auction.title}</h2>
-            <p>{auction.description}</p>
-            <p>Цена: {auction.current_price} ₽</p>
-            <p>Город: {auction.city}</p>
-            <Link to={`/auctions/${auction.id}`}>Подробнее</Link>
+            <h2 className="auction-title">{auction.title}</h2>
+            <p className="auction-meta">{auction.description}</p>
+            <p className="auction-meta">Цена: {auction.current_price} ₽</p>
+            <p className="auction-meta">Город: {auction.city}</p>
+            <Link to={`/auctions/${auction.id}`} className="text-blue-600 hover:underline mt-2 inline-block">
+              Подробнее
+            </Link>
           </div>
         ))}
       </div>
 
       {/* 🔁 Пагинация */}
-      <div className="flex justify-between mt-4">
+      <div className="flex justify-between mt-8">
         <button
           onClick={handlePreviousPage}
           disabled={!previousPage}
-          className="bg-gray-500 text-white py-2 px-4 rounded"
+          className="pagination-button"
         >
           Назад
         </button>
         <button
           onClick={handleNextPage}
           disabled={!nextPage}
-          className="bg-gray-500 text-white py-2 px-4 rounded"
+          className="pagination-button"
         >
           Вперед
         </button>

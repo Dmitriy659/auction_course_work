@@ -1,0 +1,61 @@
+/* src/components/Header/Header.css */
+
+.header {
+    background-color: #1f2937; /* темно-серый фон */
+    color: white;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header__title-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .header__icon {
+    width: 32px; /* Размер картинки */
+    height: 32px; /* Размер картинки */
+    object-fit: cover;
+  }
+  
+  .header__title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .header__nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .header__link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+  
+  .header__link:hover {
+    color: #facc15; /* желтый при наведении */
+  }
+  
+  .header__button {
+    margin-left: 16px;
+    background-color: #ef4444; /* красная кнопка */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .header__button:hover {
+    background-color: #dc2626;
+  }
+  

@@ -11,7 +11,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import User, AuctionPost, Bid
 from .serializers import UserSerializer, AuctionPostSerializer, BidSerializer
-from .permissions import IsOwnerOrReadOnly, IsOwnerOrAdmin, IsAuthenticatedOrReadOnly, CanViewOwnOrAuctionOwnerBids
+from .permissions import IsOwnerOrReadOnly, IsOwnerOrAdmin, CanViewOwnOrAuctionOwnerBids
 from rest_framework.pagination import PageNumberPagination
 
 
@@ -30,9 +30,12 @@ class UserViewSet(viewsets.ModelViewSet):
         elif self.action in ['update', 'partial_update', 'destroy']:
             # Изменение только владельцу
             return [IsOwnerOrAdmin()]
+        elif self.action == 'get_me':
+            # Разрешаем всем доступ к get_me
+            return [permissions.AllowAny()]
         return [permissions.IsAuthenticated()]
 
-    @action(detail=False, methods=['patch'], permission_classes=[IsOwnerOrAdmin()])
+    @action(detail=False, methods=['patch'], permission_classes=[permissions.IsAuthenticated(), IsOwnerOrAdmin()])
     def update_me(self, request):
         user = request.user
         serializer = self.get_serializer(user, data=request.data, partial=True)
@@ -42,15 +45,19 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['get'], permission_classes=[IsOwnerOrAdmin()])
+    @action(detail=False, methods=['get'], permission_classes=[permissions.AllowAny()])
     def get_me(self, request):
-        user = request.user
-        serializer = self.get_serializer(user)
-        return Response(serializer.data)
+        # Проверяем, аутентифицирован ли пользователь
+        if request.user.is_authenticated:
+            user = request.user
+            serializer = self.get_serializer(user)
+            return Response({**serializer.data, "is_authenticated": True})
+        else:
+            return Response({"id": -1, "is_authenticated": False}, status=status.HTTP_200_OK)
 
 
 class AuctionPostViewSet(viewsets.ModelViewSet):
-    queryset = AuctionPost.objects.all()
+    queryset = AuctionPost.objects.all().order_by('-start_date')
     serializer_class = AuctionPostSerializer
     permission_classes = [IsOwnerOrReadOnly]
     pagination_class = TenPostsPagination

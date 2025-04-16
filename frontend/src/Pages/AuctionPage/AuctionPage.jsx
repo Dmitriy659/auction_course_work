@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getAuctionDetails, getUserData, createBid } from "../../api";  // Используем существующую функцию для получения данных о пользователе
+import "./AuctionPage.css";
 
 const AuctionDetailsPage = () => {
     const { id } = useParams();  // Получаем ID аукциона из URL
@@ -58,38 +59,52 @@ const AuctionDetailsPage = () => {
     if (error) return <p>{error}</p>;
 
     const maxPrice = Math.max(auction.starting_price, auction.current_price);
-    const isAuthorized = user && user.id !== auction.user.id;  // Проверяем, что пользователь авторизован и не является автором поста
+    const isAuthorized = user.is_authenticated && user.id !== auction.user.id;  // Проверяем, что пользователь авторизован и не является автором поста
 
     return (
-        <div>
-            <Link to={`/`}>Назад</Link>
-            <h1>Детали аукциона</h1>
+        <div className="auction-details-container">
+            <Link to="/" className="back-link">← Назад</Link>
+            <h1 className="page-title">Детали аукциона</h1>
+
             {auction && (
-                <div>
-                    <h2>{auction.title}</h2>
-                    <img src={auction.image} alt={auction.title} width="200" />
-                    <p>{auction.description}</p>
-                    <p>Стартовая цена: {auction.starting_price} ₽</p>
-                    <p>Текущая цена: {maxPrice} ₽</p>
-                    <p>Дата начала: {new Date(auction.start_date).toLocaleString()}</p>
-                    <p>Автор: {auction.user.first_name} {auction.user.last_name}</p>
-                    
-                    {isAuthorized && (
-                        <div>
-                            <h3>Подать заявку</h3>
-                            <input
-                                type="number"
-                                value={bidAmount}
-                                onChange={(e) => setBidAmount(e.target.value)}
-                                placeholder={`Введите сумму (минимум $${maxPrice + 0.01})`}
-                            />
-                            <button onClick={handleBidSubmit}>Подать заявку</button>
-                            {bidError && <p style={{ color: 'red' }}>{bidError}</p>}
-                        </div>
-                    )}
-                </div>
+                <>
+                <h2 className="auction-title">{auction.title}</h2>
+
+                {auction.image ? (
+                    <img
+                    src={auction.image}
+                    alt={auction.title}
+                    className="auction-image"
+                    />
+                ) : (
+                    <div className="no-image">Нет изображения</div>
+                )}
+
+                <p className="auction-description">{auction.description}</p>
+                <p className="auction-price">Стартовая цена: {auction.starting_price} ₽</p>
+                <p className="auction-price">Текущая цена: {maxPrice} ₽</p>
+                <p className="auction-date">Дата начала: {new Date(auction.start_date).toLocaleString()}</p>
+                <p className="auction-author">Автор: {auction.user.first_name} {auction.user.last_name}</p>
+
+                {isAuthorized && (
+                    <div className="bid-section">
+                    <h3 className="bid-title">Подать заявку</h3>
+                    <input
+                        type="number"
+                        className="bid-input"
+                        value={bidAmount}
+                        onChange={(e) => setBidAmount(e.target.value)}
+                        placeholder={`Введите сумму (минимум ${maxPrice + 0.01} ₽)`}
+                    />
+                    <button className="bid-button" onClick={handleBidSubmit}>
+                        Подать заявку
+                    </button>
+                    {bidError && <p className="bid-error">{bidError}</p>}
+                    </div>
+                )}
+                </>
             )}
-        </div>
+            </div>
     );
 };
 

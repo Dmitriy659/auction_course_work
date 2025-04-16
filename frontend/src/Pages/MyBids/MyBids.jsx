@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getMyBids, deleteBid } from "../../api";
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
+import "./MyBids.css";
 
 const MyBidsPage = () => {
   const [bids, setBids] = useState([]);
@@ -27,7 +28,7 @@ const MyBidsPage = () => {
   if (bids.length === 0) return <p>Вы пока не оставили ни одной заявки.</p>;
 
   return (
-    <div>
+    <div className="bid-container">
       <h2>Мои заявки</h2>
       <ul>
         {bids.map((bid) => (
