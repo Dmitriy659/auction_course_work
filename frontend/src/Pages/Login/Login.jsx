@@ -40,7 +40,7 @@ export default function Login() {
         <button type="submit" className="login-button">Войти</button>
       </form>
       <div className="login-reset">
-        <a href="http://localhost:8000/password_reset/">Забыли пароль?</a>
+        <a href="https://backend-production-6917.up.railway.app/password_reset/">Забыли пароль?</a>
       </div>
     </div>
   );

@@ -67,7 +67,7 @@ function AuctionList() {
               <img
                 src={auction.image}
                 alt={auction.title}
-                className="auction-image"
+                className="auctions-image"
               />
             ) : (
               <div className="auction-placeholder">Нет изображения</div>

@@ -40,8 +40,8 @@
   .auction-image {
     display: block;
     margin: 0 auto 1rem;
-    max-width: 80%;
-    height: auto;
+    max-height: 300px;
+    width: auto;
     border-radius: 0.5rem;
     object-fit: cover;
   }

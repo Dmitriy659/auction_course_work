@@ -59,7 +59,7 @@ const AuctionDetailsPage = () => {
     if (error) return <p>{error}</p>;
 
     const maxPrice = Math.max(auction.starting_price, auction.current_price);
-    const isAuthorized = user.is_authenticated && user.id !== auction.user.id;  // Проверяем, что пользователь авторизован и не является автором поста
+    const isAuthorized = user && user.is_authenticated && user.id !== auction.user.id;
 
     return (
         <div className="auction-details-container">

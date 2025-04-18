@@ -29,7 +29,7 @@ SECRET_KEY = "django-insecure-8hio$x(jn%2=oz7hd*3k8k5t_fv%ru0obb!n7yqi91zyn*gl!6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "backend-production-6917.up.railway.app", "frontend-production-f463.up.railway.app", "gateway-production-93d2.up.railway.app"]
 
 
 # Application definition
@@ -152,8 +152,10 @@ AUTH_USER_MODEL = 'api.User'
 
 # В продакшене лучше указывать конкретные домены
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # React-приложение
-    "http://127.0.0.1:3000",  # Локальный React
+    "https://frontend-production-f463.up.railway.app",
+    "https://gateway-production-93d2.up.railway.app",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
 ]
 
 # Чтобы отправлять куки и авторизационные заголовки
