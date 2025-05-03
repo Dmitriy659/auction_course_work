@@ -24,12 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-8hio$x(jn%2=oz7hd*3k8k5t_fv%ru0obb!n7yqi91zyn*gl!6"
+SECRET_KEY = os.getenv('SECRET_KEY', "fake")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "backend-production-6917.up.railway.app", "frontend-production-f463.up.railway.app", "gateway-production-93d2.up.railway.app"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "backend-production-6917.up.railway.app", "frontend-production-f463.up.railway.app"]
 
 
 # Application definition
@@ -129,7 +129,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / 'collected_static'
+STATIC_ROOT = BASE_DIR / 'static'
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / 'backend_media'
@@ -147,13 +147,22 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
 }
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = os.getenv('EMAIL_LOGIN')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
+EMAIL_USE_SSL = True
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
+EMAIL_ADMIN = EMAIL_HOST_USER
 AUTH_USER_MODEL = 'api.User'
 
 # В продакшене лучше указывать конкретные домены
 CORS_ALLOWED_ORIGINS = [
     "https://frontend-production-f463.up.railway.app",
-    "https://gateway-production-93d2.up.railway.app",
     "http://localhost:3000",
     "http://127.0.0.1:3000"
 ]

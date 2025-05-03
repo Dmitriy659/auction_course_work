@@ -58,7 +58,7 @@ const MyAuctionsPage = () => {
                 <img
                   src={auction.image}
                   alt={auction.title}
-                  className="auction-image"
+                  className="auction-image-user"
                   width="100"
                 />
               </div>

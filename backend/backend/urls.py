@@ -9,7 +9,8 @@ from rest_framework_simplejwt.views import (
 )
 from django.contrib.auth import views as auth_views
 from django.conf import settings
-from django.conf.urls.static import static
+from django.views.static import serve
+from django.urls import re_path
 
 router = DefaultRouter()
 router.register(r'bids', BidViewSet)
@@ -30,16 +31,11 @@ urlpatterns = [
     path("api/v1/token/refresh/", TokenRefreshView.as_view(), name="token_refresh")
 ]
 
-if settings.DEBUG:
-    # отдача медиафайлов только если DEBUG = True
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-else:
-    # отдача медиафайлов даже если DEBUG = False
-    from django.views.static import serve
-    from django.urls import re_path
-
-    urlpatterns += [
-        re_path(r'^media/(?P<path>.*)$', serve, {
-            'document_root': settings.MEDIA_ROOT,
-        }),
-    ]
+urlpatterns += [
+    re_path(r'^media/(?P<path>.*)$', serve, {
+        'document_root': settings.MEDIA_ROOT,
+    }),
+    re_path(r'^static/(?P<path>.*)$', serve, {
+        'document_root': settings.STATIC_ROOT,
+    }),
+]
