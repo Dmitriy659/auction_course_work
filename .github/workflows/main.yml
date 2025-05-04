@@ -76,7 +76,7 @@ jobs:
         with:
           context: ./frontend/
           push: true
-          tags: korro345/auction_frotnend
+          tags: korro345/auction_frontend
   notify_telegram:
     name: Notify via Telegram
     runs-on: ubuntu-latest
