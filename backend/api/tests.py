@@ -2,7 +2,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.test import APITestCase
-from .models import AuctionPost, Bid
+from .models import AuctionPost
 
 User = get_user_model()
 
@@ -60,9 +60,8 @@ class APILogicTests(APITestCase):
         url = reverse('bid-list')
         resp1 = self.client.post(url, {'auction_post': self.auction_id, 'amount': '150.00'})
         self.assertEqual(resp1.status_code, status.HTTP_201_CREATED)
-        bid1_id = resp1.data['id']
         # New other2 user
-        other2 = User.objects.create_user(username='u2', email='u2@example.com', password='pass')
+        User.objects.create_user(username='u2', email='u2@example.com', password='pass')
         resp = self.client.post(reverse('token_obtain_pair'), {'username': 'u2', 'password': 'pass'})
         token2 = resp.data['access']
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {token2}')
