@@ -74,7 +74,7 @@ const AuctionDetailsPage = () => {
                     <img
                     src={auction.image}
                     alt={auction.title}
-                    className="auction-image"
+                    className="auction-image-user"
                     />
                 ) : (
                     <div className="no-image">Нет изображения</div>
