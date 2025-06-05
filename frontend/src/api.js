@@ -35,6 +35,7 @@ api.interceptors.response.use(
       !skipRefresh
     ) {
       originalRequest._retry = true;
+      console.log("инспектор");
 
       try {
         const refreshToken = localStorage.getItem("refreshToken");
@@ -102,7 +103,7 @@ export const login = async (username, password) => {
 
     const { access, refresh } = response.data;
 
-    if (!access || !refresh) {
+    if (!access || !refresh || response.status != 200) {
       throw new Error("Не удалось получить токены");
     }
 
