@@ -94,10 +94,10 @@ export const logout = () => {
 };
 
 export const login = async (username, password) => {
-    const response = await api.post("/token/", {username, password});
+  try {
+    const response = await api.post("/token/", { username, password });
 
-    const { access, refresh } = response.data;
-    if (!access || !refresh) {
+    if (response.status !== 200) {
       throw new Error("Неверный логин или пароль");
     }
 
@@ -105,6 +105,9 @@ export const login = async (username, password) => {
     localStorage.setItem("refreshToken", response.data.refresh);
     window.dispatchEvent(new Event("storage"));
     return response.data;
+  } catch (error) {
+    throw new Error("Неверный логин или пароль");
+  }
 };
 
 export const register = async (userData) => {

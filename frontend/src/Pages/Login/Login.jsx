@@ -10,7 +10,7 @@ export default function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLoginButton = async (e) => {
     e.preventDefault();
     try {
       await login(username, password);
@@ -23,7 +23,7 @@ export default function Login() {
   return (
     <div className="login-container">
       <h2 className="login-title">Войти</h2>
-      <form onSubmit={handleLogin} className="login-form">
+      <form onSubmit={handleLoginButton} className="login-form">
         <input
           type="text"
           placeholder="Имя пользователя"
