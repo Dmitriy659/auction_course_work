@@ -94,24 +94,36 @@ export const logout = () => {
 };
 
 export const login = async (username, password) => {
-  try {
     const response = await api.post("/token/", {username, password});
+
+    const { access, refresh } = response.data;
+    if (!access || !refresh) {
+      throw new Error("Неверный логин или пароль");
+    }
+
     localStorage.setItem("token", response.data.access);
     localStorage.setItem("refreshToken", response.data.refresh);
     window.dispatchEvent(new Event("storage"));
     return response.data;
-  }
-  catch (error) {
-    console.error("Ошибка входа:", error);
-  }
 };
 
 export const register = async (userData) => {
   try {
     const response = await api.post("/users/", userData);
+    if (response.status !== 201) {
+      throw new Error("Ошибка регистрации");
+    }
     return response.data;
   } catch (error) {
-    console.error("Ошибка регистрации:", error);
+    if (error.response?.data) {
+      const data = error.response.data;
+
+      const messages = Object.entries(data)
+        .map(([field, messages]) => `${field}: ${messages.join(", ")}`)
+        .join("\n");
+
+      throw new Error(messages);
+    }
   }
 };
 

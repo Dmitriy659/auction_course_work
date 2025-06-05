@@ -28,7 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class AuctionPostSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-    current_price = serializers.DecimalField(required=False, max_digits=10, decimal_places=2)  #
+    current_price = serializers.DecimalField(required=False, max_digits=10, decimal_places=2)
 
     class Meta:
         model = AuctionPost
@@ -36,14 +36,12 @@ class AuctionPostSerializer(serializers.ModelSerializer):
                   'image', 'city']
 
     def validate(self, data):
-        # Получаем объект аукциона (если редактируем)
         auction_post = self.instance
         if auction_post and 'starting_price' in data and data['starting_price'] != auction_post.starting_price:
             raise serializers.ValidationError("Стартовую цену нельзя изменить после создания аукциона.")
         return data
 
     def create(self, validated_data):
-        # Устанавливаем current_price в starting_price, если он не передан
         if 'current_price' not in validated_data:
             validated_data['current_price'] = validated_data.get('starting_price')
 
@@ -53,11 +51,9 @@ class AuctionPostSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        # Запрещаем изменение стартовой цены
         if 'starting_price' in validated_data:
             raise serializers.ValidationError("Стартовую цену нельзя изменить.")
 
-        # Оставляем только обновления для остальных полей
         return super().update(instance, validated_data)
 
 

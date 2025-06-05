@@ -7,6 +7,7 @@ import "./Login.css";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -15,7 +16,7 @@ export default function Login() {
       await login(username, password);
       navigate("/");
     } catch (error) {
-      alert("Ошибка входа");
+      setErrorMessage("Неверный логин или пароль");
     }
   };
 
@@ -38,6 +39,9 @@ export default function Login() {
           required
         />
         <button type="submit" className="login-button">Войти</button>
+        {errorMessage && (
+          <div className="login-error">{errorMessage}</div> // Сообщение об ошибке
+        )}
       </form>
       <div className="login-reset">
         <a href="https://backend-production-6917.up.railway.app/password_reset/">Забыли пароль?</a>

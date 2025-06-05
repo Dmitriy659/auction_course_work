@@ -1,5 +1,12 @@
 /* src/pages/Register.css */
 
+.register-error {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
 .register-container {
     max-width: 500px;
     margin: 40px auto;

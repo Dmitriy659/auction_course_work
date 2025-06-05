@@ -13,6 +13,7 @@ export default function Register() {
   const [telephone, setTelephone] = useState("");
   const [telegram, setTelegram] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -21,7 +22,7 @@ export default function Register() {
       await register({ email, username, password, first_name, last_name, city, telephone, telegram });
       navigate("/login");
     } catch (error) {
-      alert("Ошибка регистрации");
+      setErrorMessage(error.message);
     }
   };
 
@@ -31,35 +32,35 @@ export default function Register() {
       <form onSubmit={handleRegister} className="register-form">
         <input
           type="email"
-          placeholder="Email"
+          placeholder="Email*"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
         <input
           type="text"
-          placeholder="Имя пользователя"
+          placeholder="Имя пользователя*"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
         <input
           type="text"
-          placeholder="Имя"
+          placeholder="Имя*"
           value={first_name}
           onChange={(e) => setFirstName(e.target.value)}
           required
         />
         <input
           type="text"
-          placeholder="Фамилия"
+          placeholder="Фамилия*"
           value={last_name}
           onChange={(e) => setLastName(e.target.value)}
           required
         />
         <input
           type="text"
-          placeholder="Город"
+          placeholder="Город*"
           value={city}
           onChange={(e) => setCity(e.target.value)}
           required
@@ -69,18 +70,16 @@ export default function Register() {
           placeholder="Телефон"
           value={telephone}
           onChange={(e) => setTelephone(e.target.value)}
-          required
         />
         <input
           type="text"
           placeholder="Телеграм"
           value={telegram}
           onChange={(e) => setTelegram(e.target.value)}
-          required
         />
         <input
           type="password"
-          placeholder="Пароль"
+          placeholder="Пароль*"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
@@ -89,6 +88,7 @@ export default function Register() {
           Зарегистрироваться
         </button>
       </form>
+      {errorMessage && <div className="register-error">{errorMessage}</div>}
     </div>
   );
 }

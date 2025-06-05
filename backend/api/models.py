@@ -1,5 +1,12 @@
 from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.core.validators import RegexValidator
 from django.db import models
+
+
+phone_validator = RegexValidator(
+    regex=r'^\+?\d{10,15}$',
+    message="Телефон должен быть в формате '+1234567890' (от 10 до 15 цифр)."
+)
 
 
 class User(AbstractUser):
@@ -8,7 +15,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=50)
     date_joined = models.DateTimeField(auto_now_add=True)
     city = models.CharField(max_length=100)
-    telephone = models.CharField(max_length=20, null=True, blank=True)
+    telephone = models.CharField(max_length=20, null=True, blank=True, validators=[phone_validator])
     telegram = models.CharField(max_length=20, null=True, blank=True)
 
     groups = models.ManyToManyField(
