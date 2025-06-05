@@ -100,18 +100,22 @@ export const login = async (username, password) => {
       _skipRefresh: true,
     });
 
-    if (response.status !== 200) {
-      throw new Error("Неверный логин или пароль");
+    const { access, refresh } = response.data;
+
+    if (!access || !refresh) {
+      throw new Error("Не удалось получить токены");
     }
 
-    localStorage.setItem("token", response.data.access);
-    localStorage.setItem("refreshToken", response.data.refresh);
+    localStorage.setItem("token", access);
+    localStorage.setItem("refreshToken", refresh);
     window.dispatchEvent(new Event("storage"));
+
     return response.data;
   } catch (error) {
     throw new Error("Неверный логин или пароль");
   }
 };
+
 
 export const register = async (userData) => {
   try {

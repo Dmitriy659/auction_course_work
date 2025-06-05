@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../api";
@@ -13,12 +12,16 @@ export default function Login() {
   const handleLoginButton = async (e) => {
     e.preventDefault();
     try {
-      await login(username, password);
-      alert("wer");
-      navigate("/");
-    } catch (error) {
-      setErrorMessage("Неверный логин или пароль");
+      const result = await login(username, password);
+      
+      if (!result?.access || !result?.refresh) {
+        setErrorMessage("Ошибка авторизации");
+        return;
+      }
 
+      navigate("/"); // только если всё успешно
+    } catch (error) {
+      setErrorMessage(error.message || "Ошибка входа");
     }
   };
 
