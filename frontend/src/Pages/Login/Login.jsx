@@ -14,6 +14,7 @@ export default function Login() {
     e.preventDefault();
     try {
       await login(username, password);
+      alert("wer");
       navigate("/");
     } catch (error) {
       setErrorMessage("Неверный логин или пароль");
