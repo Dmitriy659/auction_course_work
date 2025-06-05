@@ -11,6 +11,7 @@ const AuctionDetailsPage = () => {
     const [error, setError] = useState(null);
     const [bidAmount, setBidAmount] = useState("");  // Состояние для цены заявки
     const [bidError, setBidError] = useState("");  // Состояние для ошибки заявки
+    const [bidSuccess, setBidSuccess] = useState("");
 
     useEffect(() => {
         loadAuction();
@@ -41,16 +42,19 @@ const AuctionDetailsPage = () => {
         const maxPrice = Math.max(auction.starting_price, auction.current_price);
 
         if (parseFloat(bidAmount) <= maxPrice) {
+            setBidSuccess("");
             setBidError("Заявка должна быть больше текущей цены.");
             return;
         }
 
         try {
             await createBid(id, bidAmount);  // Отправляем заявку через API
-            alert("Заявка успешно подана!");
+            setBidSuccess("Заявка успешно подана");
+            setBidError("");
             setBidAmount("");  // Очищаем поле после успешной заявки
             loadAuction();
         } catch (error) {
+            setBidSuccess("");
             setBidError("Ошибка при подаче заявки.");
         }
     };
@@ -100,6 +104,7 @@ const AuctionDetailsPage = () => {
                         Подать заявку
                     </button>
                     {bidError && <p className="bid-error">{bidError}</p>}
+                    {bidSuccess && <p className="bid-success">{bidSuccess}</p>}
                     </div>
                 )}
                 </>
