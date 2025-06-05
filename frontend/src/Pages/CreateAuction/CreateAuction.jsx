@@ -30,7 +30,7 @@ export default function CreateAuction() {
       navigate("/my-auctions");
     }
     else {
-        setError("Не удалось создать аукцион. Попробуйте еще раз.");
+        setError("Не удалось создать аукцион. Проверьте данные и попробуйте еще раз.");
     }
   };
 

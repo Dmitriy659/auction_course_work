@@ -16,6 +16,7 @@ const EditAuctionPage = () => {
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [update_error, setUpdateError] = useState(null);
 
     useEffect(() => {
         loadAuction();
@@ -62,7 +63,7 @@ const EditAuctionPage = () => {
             await updateAuction(id, auction);
             navigate("/my-auctions");
         } catch (error) {
-            alert("Ошибка при обновлении аукциона");
+            setUpdateError("Ошибка при обновлении аукциона. Проверьте введённые данные");
         }
     };
 
@@ -71,6 +72,7 @@ const EditAuctionPage = () => {
 
     return (
         <div className="edit-auction-container">
+            {update_error && <div className="error-message">{update_error}</div>}
             <h1 className="page-title">Редактировать аукцион</h1>
             <form onSubmit={handleSubmit} className="auction-form">
                 <input

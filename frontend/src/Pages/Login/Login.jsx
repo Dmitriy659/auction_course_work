@@ -17,6 +17,7 @@ export default function Login() {
       navigate("/");
     } catch (error) {
       setErrorMessage("Неверный логин или пароль");
+
     }
   };
 
@@ -40,7 +41,7 @@ export default function Login() {
         />
         <button type="submit" className="login-button">Войти</button>
         {errorMessage && (
-          <div className="login-error">{errorMessage}</div> // Сообщение об ошибке
+          <div className="login-error">{errorMessage}</div>
         )}
       </form>
       <div className="login-reset">
