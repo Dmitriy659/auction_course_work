@@ -29,12 +29,12 @@ SECRET_KEY = os.getenv('SECRET_KEY', "fake")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "backend-production-6917.up.railway.app", "frontend-production-f463.up.railway.app"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "backend-production-6917.up.railway.app", "auction-frontend-production.up.railway.app"]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost",
     "http://127.0.0.1",
     "https://backend-production-6917.up.railway.app",
-    "https://frontend-production-f463.up.railway.app"
+    "https://auction-frontend-production.up.railway.app"
 ]
 
 CSRF_COOKIE_SECURE = True
@@ -172,7 +172,7 @@ AUTH_USER_MODEL = 'api.User'
 
 # В продакшене лучше указывать конкретные домены
 CORS_ALLOWED_ORIGINS = [
-    "https://frontend-production-f463.up.railway.app",
+    "https://auction-frontend-production.up.railway.app",
     "http://localhost:3000",
     "http://127.0.0.1:3000"
 ]
