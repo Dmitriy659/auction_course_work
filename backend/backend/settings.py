@@ -30,6 +30,16 @@ SECRET_KEY = os.getenv('SECRET_KEY', "fake")
 DEBUG = False
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "backend-production-6917.up.railway.app", "frontend-production-f463.up.railway.app"]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost",
+    "http://127.0.0.1",
+    "https://backend-production-6917.up.railway.app",
+    "https://frontend-production-f463.up.railway.app"
+]
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
 
 
 # Application definition

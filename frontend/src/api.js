@@ -27,12 +27,12 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const skipRefresh = originalRequest._skipRefresh || originalRequest.headers?._skipRefresh;
 
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
-      !originalRequest.url.includes("token/refresh") &&
-      !originalRequest.url.includes("/token/")
+      !skipRefresh
     ) {
       originalRequest._retry = true;
 
@@ -96,7 +96,9 @@ export const logout = () => {
 
 export const login = async (username, password) => {
   try {
-    const response = await api.post("/token/", { username, password });
+    const response = await api.post("/token/", { username, password }, {
+      _skipRefresh: true,
+    });
 
     if (response.status !== 200) {
       throw new Error("Неверный логин или пароль");
@@ -113,7 +115,9 @@ export const login = async (username, password) => {
 
 export const register = async (userData) => {
   try {
-    const response = await api.post("/users/", userData);
+    const response = await api.post("/users/", userData, {
+      _skipRefresh: true,
+    });
     if (response.status !== 201) {
       throw new Error("Ошибка регистрации");
     }
