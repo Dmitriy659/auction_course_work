@@ -60,6 +60,7 @@ api.interceptors.response.use(
         localStorage.removeItem("token");
         localStorage.removeItem("refreshToken");
         window.location.href = "/login"; // редирект на логин
+        console.trace("window.location.href = '/login' вызван из интерцептора");
         return Promise.reject(refreshError);
       }
     }

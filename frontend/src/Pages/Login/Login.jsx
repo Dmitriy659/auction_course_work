@@ -20,6 +20,7 @@ export default function Login() {
       }
 
       navigate("/"); // только если всё успешно
+      console.trace("navigate('/') вызван после успешного логина");
     } catch (error) {
       setErrorMessage(error.message || "Ошибка входа");
     }
