@@ -30,64 +30,104 @@ export default function Register() {
     <div className="register-container">
       <h2 className="register-title">Регистрация</h2>
       <form onSubmit={handleRegister} className="register-form">
+      <div className="form-group">
+        <label htmlFor="email">Email*</label>
         <input
+          id="email"
           type="email"
-          placeholder="Email*"
+          placeholder="Введите ваш email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="username">Имя пользователя*</label>
         <input
+          id="username"
           type="text"
-          placeholder="Имя пользователя*"
+          placeholder="Придумайте имя пользователя"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="first_name">Имя*</label>
         <input
+          id="first_name"
           type="text"
-          placeholder="Имя*"
+          placeholder="Введите ваше имя"
           value={first_name}
           onChange={(e) => setFirstName(e.target.value)}
           required
         />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="last_name">Фамилия*</label>
         <input
+          id="last_name"
           type="text"
-          placeholder="Фамилия*"
+          placeholder="Введите вашу фамилию"
           value={last_name}
           onChange={(e) => setLastName(e.target.value)}
           required
         />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="city">Город*</label>
         <input
+          id="city"
           type="text"
-          placeholder="Город*"
+          placeholder="Введите ваш город"
           value={city}
           onChange={(e) => setCity(e.target.value)}
           required
         />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="telephone">Телефон</label>
         <input
+          id="telephone"
           type="text"
-          placeholder="Телефон"
+          placeholder="Введите ваш телефон"
           value={telephone}
           onChange={(e) => setTelephone(e.target.value)}
         />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="telegram">Телеграм</label>
         <input
+          id="telegram"
           type="text"
-          placeholder="Телеграм"
+          placeholder="Введите ваш телеграм"
           value={telegram}
           onChange={(e) => setTelegram(e.target.value)}
         />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="password">Пароль*</label>
         <input
+          id="password"
           type="password"
-          placeholder="Пароль*"
+          placeholder="Придумайте пароль"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" className="register-button">
-          Зарегистрироваться
-        </button>
-      </form>
+      </div>
+
+      <button type="submit" className="register-button">
+        Зарегистрироваться
+      </button>
+    </form>
       {errorMessage && <div className="register-error">{errorMessage}</div>}
     </div>
   );

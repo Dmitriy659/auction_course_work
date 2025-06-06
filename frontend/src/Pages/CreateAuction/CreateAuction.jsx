@@ -39,46 +39,78 @@ export default function CreateAuction() {
       <h2 className="page-title">Создать аукцион</h2>
       {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleCreateAuction} className="auction-form">
+      <div className="form-group">
+        <label htmlFor="auction-title">Название лота*</label>
         <input
+          id="auction-title"
           type="text"
-          placeholder="Название"
+          placeholder="Введите название лота"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
           className="form-input"
         />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="auction-description">Описание лота*</label>
         <textarea
-          placeholder="Описание"
+          id="auction-description"
+          placeholder="Подробно опишите лот, его состояние и особенности"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
           className="form-textarea"
         />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="auction-starting-price">Начальная цена, ₽*</label>
+        <div className="price-input-container">
+          <input
+            id="auction-starting-price"
+            type="number"
+            placeholder="0"
+            min="0"
+            step="0.01"
+            value={startingPrice}
+            onChange={(e) => setStartingPrice(e.target.value)}
+            required
+            className="form-input"
+          />
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="auction-city">Город*</label>
         <input
-          type="number"
-          placeholder="Начальная цена"
-          value={startingPrice}
-          onChange={(e) => setStartingPrice(e.target.value)}
-          required
-          className="form-input"
-        />
-        <input
+          id="auction-city"
           type="text"
-          placeholder="Город"
+          placeholder="Введите город нахождения лота"
           value={city}
           onChange={(e) => setCity(e.target.value)}
           required
           className="form-input"
         />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="auction-image">Изображение лота*</label>
         <input
+          id="auction-image"
           type="file"
           accept="image/*"
           onChange={(e) => setImage(e.target.files[0])}
           required
           className="form-input-file"
         />
-        <button type="submit" className="submit-button">Создать</button>
-      </form>
+        <p className="file-hint">Загрузите основное изображение лота (JPG, PNG или GIF)</p>
+      </div>
+
+      <button type="submit" className="submit-button">
+        Создать аукцион
+      </button>
+    </form>
     </div>
   )
 }

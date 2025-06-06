@@ -75,39 +75,63 @@ const EditAuctionPage = () => {
             {update_error && <div className="error-message">{update_error}</div>}
             <h1 className="page-title">Редактировать аукцион</h1>
             <form onSubmit={handleSubmit} className="auction-form">
+            <div className="form-group">
+                <label htmlFor="auction-title">Заголовок*</label>
                 <input
+                id="auction-title"
                 type="text"
                 name="title"
-                placeholder="Заголовок"
+                placeholder="Введите название лота"
                 value={auction.title}
                 onChange={handleChange}
                 required
                 className="form-input"
                 />
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="auction-description">Описание*</label>
                 <textarea
+                id="auction-description"
                 name="description"
-                placeholder="Описание"
+                placeholder="Подробно опишите лот"
                 value={auction.description}
                 onChange={handleChange}
                 required
                 className="form-textarea"
                 />
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="auction-city">Город*</label>
                 <input
+                id="auction-city"
                 type="text"
                 name="city"
-                placeholder="Город"
+                placeholder="Укажите город нахождения лота"
                 value={auction.city}
                 onChange={handleChange}
                 required
                 className="form-input"
                 />
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="auction-image">Изображение лота</label>
                 <input
+                id="auction-image"
                 type="file"
                 name="image"
                 onChange={handleChange}
                 className="form-input-file"
+                accept="image/*"
                 />
-                <button type="submit" className="submit-button">Сохранить</button>
+                <small className="file-hint">Поддерживаемые форматы: JPG, PNG, GIF</small>
+            </div>
+
+            <button type="submit" className="submit-button">
+                Сохранить
+            </button>
             </form>
             </div>
 

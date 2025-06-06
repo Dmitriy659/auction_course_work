@@ -30,25 +30,38 @@ export default function Login() {
     <div className="login-container">
       <h2 className="login-title">Войти</h2>
       <form onSubmit={handleLoginButton} className="login-form">
+      <div className="form-group">
+        <label htmlFor="login-username">Имя пользователя*</label>
         <input
+          id="login-username"
           type="text"
-          placeholder="Имя пользователя"
+          placeholder="Введите ваше имя пользователя"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="login-password">Пароль*</label>
         <input
+          id="login-password"
           type="password"
-          placeholder="Пароль"
+          placeholder="Введите ваш пароль"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit" className="login-button">Войти</button>
-        {errorMessage && (
-          <div className="login-error">{errorMessage}</div>
-        )}
-      </form>
+      </div>
+
+      <button type="submit" className="login-button">
+        Войти
+      </button>
+
+      {errorMessage && (
+        <div className="login-error">{errorMessage}</div>
+      )}
+    </form>
       <div className="login-reset">
         <a href="https://backend-production-6917.up.railway.app/password_reset/">Забыли пароль?</a>
       </div>
