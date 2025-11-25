@@ -1,63 +1,38 @@
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.cluster import DBSCAN
 import matplotlib.pyplot as plt
+import seaborn as sns
 
-df = pd.read_csv("stars.csv")
+# Предположим, что df уже загружен, как в твоем описании
+df = pd.read_csv('stars.csv')
 
-X = df.drop(columns=["TargetClass"])
+# Кодируем категориальный признак SpType
+le = LabelEncoder()
+df['SpType_encoded'] = le.fit_transform(df['SpType'])
 
-if "SpType" in X.columns:
-    X = pd.get_dummies(X, columns=["SpType"])
+# Выбираем признаки для кластеризации
+features = ['Vmag', 'Plx', 'e_Plx', 'B-V', 'Amag', 'SpType_encoded']
+X = df[features]
 
+# Масштабируем данные
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
-inertia = []
-K_range = range(1, 10)
+# DBSCAN
+dbscan = DBSCAN(eps=3, min_samples=5)  # eps и min_samples можно подбирать
+clusters = dbscan.fit_predict(X_scaled)
 
-for k in K_range:
-    km = KMeans(n_clusters=k, random_state=42)
-    km.fit(X_scaled)
-    inertia.append(km.inertia_)
+# Добавляем кластеры в датафрейм
+df['DBSCAN_cluster'] = clusters
 
-plt.figure(figsize=(8, 5))
-plt.plot(K_range, inertia, marker="o")
-plt.xlabel("Количество кластеров k")
-plt.ylabel("Inertia (сумма квадратов расстояний)")
-plt.title("Метод локтя")
-plt.grid(True)
+# Посмотрим распределение по кластерам
+print(df['DBSCAN_cluster'].value_counts())
+
+# Визуализация (например, по двум первым компонентам)
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x=X_scaled[:, 0], y=X_scaled[:, 1], hue=clusters, palette='tab10', legend='full')
+plt.title('DBSCAN кластеризация')
+plt.xlabel('Vmag')
+plt.ylabel('Plx')
 plt.show()
-
-silhouette_scores = []
-
-for k in range(2, 10):  # силуэт определён только для k ≥ 2
-    km = KMeans(n_clusters=k, random_state=42)
-    labels = km.fit_predict(X_scaled)
-    score = silhouette_score(X_scaled, labels)
-    silhouette_scores.append(score)
-    print(f"k={k}, silhouette={score:.4f}")
-
-plt.figure(figsize=(8, 5))
-plt.plot(range(2, 10), silhouette_scores, marker="o")
-plt.xlabel("Количество кластеров k")
-plt.ylabel("Коэффициент силуэта")
-plt.title("Анализ силуэта")
-plt.grid(True)
-plt.show()
-
-# ===============================
-# 6. Выбор оптимального k (например, максимальный силуэт)
-# ===============================
-best_k = range(2,10)[silhouette_scores.index(max(silhouette_scores))]
-print(f"\nОптимальное количество кластеров (по силуэту): {best_k}")
-
-# ===============================
-# 7. Финальная кластеризация
-# ===============================
-kmeans = KMeans(n_clusters=best_k, random_state=42)
-df["Cluster"] = kmeans.fit_predict(X_scaled)
-
-print("\nКластеризация завершена! Первые строки:")
-print(df.head())
